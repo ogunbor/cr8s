@@ -2,7 +2,9 @@ use clap::{Command, Arg};
 
 extern crate cr8s;
 
-fn main () {
+#[tokio::main]
+async fn main() {
+
     let matches = Command::new("Cr8s")
         .about("Cr8s commands")
         .arg_required_else_help(true)
@@ -31,9 +33,16 @@ fn main () {
     
     match matches.subcommand() {
         Some(("users", sub_matches)) => match sub_matches.subcommand() {
-            Some(("create", sub_matches)) => create_user(),
-            Some(("list", sub_matches)) => list_users(),
-            Some(("delete", sub_matches)) => delete_user(),
+            Some(("create", sub_matches)) => cr8s::commands::create_user(
+                sub_matches.get_one::<String>("username").unwrap().to_owned(),
+                sub_matches.get_one::<String>("password").unwrap().to_owned(),
+                sub_matches.get_many::<String>("roles").unwrap().map(|v| v.to_owned()).collect(),
+            ).await,
+            Some(("list", _)) => cr8s::commands::list_users().await,
+            Some(("delete", _)) => cr8s::commands::delete_user(
+                sub_matches.get_one::<i32>("username").unwrap().to_owned(),
+            ).await,
+
         },
         _ => {},
     }
