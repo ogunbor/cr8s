@@ -1,5 +1,5 @@
 use crate::models::{NewRustacean, Rustacean, User};
-use crate::rocket_routes::{DbConn, server_error};
+use use crate::rocket_routes::{DbConn, EditorUser, server_error};
 use crate::repositories::RustaceanRepository;
 
 use rocket::serde::json::{Json, serde_json::json, Value};
@@ -23,7 +23,7 @@ pub async fn view_rustacean(mut db: Connection<DbConn>, id: i32, _user: User) ->
     }).await
 }
 #[rocket::post("/rustaceans", format="json", data="<new_rustacean>")]
-pub async fn create_rustacean(mut db: Connection<DbConn>, new_rustacean: Json<NewRustacean>, _user: User) -> Result<Custom<Value>, Custom<Value>> {
+pub async fn create_rustacean(mut db: Connection<DbConn>, new_rustacean: Json<NewRustacean>, _user: EditorUser) -> Result<Custom<Value>, Custom<Value>> {
         RustaceanRepository::create(c, new_rustacean.into_inner())
             .map(|rustacean| Custom(Status::Created, json!(rustacean)))
             .map_err(|e| server_error(e.into()))
