@@ -29,7 +29,14 @@ async fn main() {
                         .about("Delete user by ID")
                         .arg(Arg::new("id").required(true).value_parser(value_parser!(i32)))
                 )
-        ).get_matches();
+        )
+        .subcommand(
+            Command::new("digest-send")
+                .about("Send a digest with latest crates via email")
+                .arg(Arg::new("email").required(true))
+                .arg(Arg::new("hours_since").required(true).value_parser(value_parser!(i32)))
+        )
+        .get_matches();
     
     match matches.subcommand() {
         Some(("users", sub_matches)) => match sub_matches.subcommand() {
