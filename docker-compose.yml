@@ -22,8 +22,10 @@ services:
           redis={url=redis://redis:6379}
         }
       - SMTP_HOST=smtp.gmail.com
-      - SMTP_USERNAME=
-      - SMTP_PASSWORD=
+      - SMTP_USERNAME=jerry@gmail.com
+      - SMTP_PASSWORD=pprw smpt rrve wuty
+      - FOO
+
 
 
     ports:
