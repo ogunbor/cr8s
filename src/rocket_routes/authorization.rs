@@ -1,3 +1,4 @@
+use crate::models::User;
 use crate::rocket_routes::{CacheConn, DbConn, server_error};
 use crate::repositories::UserRepository;
 use crate::auth::{Credentials, authorize_user};
@@ -27,5 +28,10 @@ cache.set_ex::<String, i32, ()>(
 Ok(json!({
     "token": session_id,
 }))
-
 }
+
+#[rocket::get("/me")]
+pub fn me(user: User) -> Value {
+    json!(user)
+}
+
